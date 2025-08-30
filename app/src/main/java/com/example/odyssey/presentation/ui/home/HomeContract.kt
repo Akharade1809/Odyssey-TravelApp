@@ -27,11 +27,14 @@ data class HomeState(
     val popularDestinations : List<Destination> = emptyList(),
     val userPreferences : UserPreferences? = null,
     val quickActions : List<QuickAction> = getDefaultQuickActions(),
-    val error : String? = null
+    val error : String? = null,
+    val locationStatus : String? = null,
+    val hasLocationData : Boolean = false
 ) : ViewState
 
 sealed class HomeIntent : ViewIntent {
     object LoadHomeData : HomeIntent()
+    object LoadLocationBasedData : HomeIntent()
     object NavigateToItinerary : HomeIntent()
     object NavigateToChat : HomeIntent()
     object NavigateToExplore : HomeIntent()

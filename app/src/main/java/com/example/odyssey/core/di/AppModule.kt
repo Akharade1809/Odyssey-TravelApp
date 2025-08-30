@@ -1,9 +1,9 @@
 package com.example.odyssey.core.di
 
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import com.example.odyssey.core.database.TravelDatabase
-import com.example.odyssey.presentation.ui.home.HomeViewModel
+import com.example.odyssey.data.remote.AuthInterceptor
+import com.example.odyssey.data.remote.FourSquareApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -25,9 +25,11 @@ val appModule = module {
     }
     single { get<TravelDatabase>().destinationDao() }
 
+
     //Network
     single {
         OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(FourSquareApiService.API_KEY))
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
@@ -36,10 +38,11 @@ val appModule = module {
 
     single {
         Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
+            .baseUrl(FourSquareApiService.BASE_URL)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+    single { get<Retrofit>().create(FourSquareApiService::class.java) }
 }
 

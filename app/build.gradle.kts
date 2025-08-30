@@ -11,6 +11,10 @@ android {
     namespace = "com.example.odyssey"
     compileSdk = 36
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.odyssey"
         minSdk = 24
@@ -23,7 +27,16 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "FOURSQUARE_API_KEY",
+            "\"${project.findProperty("FOURSQUARE_API_KEY") ?: ""}\""
+        )
+
     }
+
+
 
     buildTypes {
         release {

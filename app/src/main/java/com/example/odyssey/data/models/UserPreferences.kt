@@ -6,7 +6,7 @@ data class UserPreferences(
     val currency: String = "USD",
     val favoriteCategories: List<String> = emptyList(),
     val isFirstLaunch: Boolean = true,
-    val userName: String = "Explorer",
+    val userName: String = "Arjun Explorer",
     val notificationEnabled: Boolean = true,
     val themeMode: String = "system",
     val language: String = "en",

@@ -5,7 +5,7 @@ import com.example.odyssey.domain.repository.DestinationRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetPopularDestinationUseCase(private val repository: DestinationRepository) {
-    suspend operator fun invoke(): Flow<List<Destination>> {
-        return repository.getPopularDestination()
+    suspend operator fun invoke(latitude: Double? = null, longitude: Double? = null): Flow<List<Destination>> {
+        return repository.getPopularDestination(latitude,longitude)
     }
 }

@@ -1,5 +1,7 @@
 package com.example.odyssey.presentation.ui.home
 
+import android.Manifest
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -20,25 +22,47 @@ import com.example.odyssey.presentation.theme.*
 import com.example.odyssey.presentation.ui.components.AICuratedDestinationsSection
 import com.example.odyssey.presentation.ui.components.AIQuickActionsSection
 import com.example.odyssey.presentation.ui.components.AITravelInsightsCard
-import com.example.odyssey.presentation.ui.components.AIWelcomeHeader
-import org.koin.androidx.compose.koinViewModel
+import com.example.odyssey.presentation.ui.components.AIWelcomeHeaderWithLocation
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
     onNavigateToItinerary: () -> Unit = {},
     onNavigateToChat: () -> Unit = {},
     onNavigateToExplore: () -> Unit = {},
     onNavigateToDestination: (Destination) -> Unit = {},
-    viewModel: HomeViewModel = koinViewModel()
+    viewModel: HomeViewModel
 ) {
     val state by viewModel.viewState.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.handleIntent(HomeIntent.LoadHomeData)
+    val locationPermissionState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    )
+
+    LaunchedEffect(locationPermissionState.allPermissionsGranted) {
+        if (locationPermissionState.allPermissionsGranted) {
+            viewModel.handleIntent(HomeIntent.LoadHomeData)
+        } else {
+            // Load data without location first
+            viewModel.handleIntent(HomeIntent.LoadHomeData)
+            // Then request permissions
+            locationPermissionState.launchMultiplePermissionRequest()
+        }
     }
 
+    // Handle permission grant after user responds
+    LaunchedEffect(locationPermissionState.permissions.any { it.status.isGranted }) {
+        if (locationPermissionState.permissions.any { it.status.isGranted }) {
+            viewModel.handleIntent(HomeIntent.LoadLocationBasedData)
+        }
+    }
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -72,9 +96,16 @@ fun HomeScreen(
         ) {
             // AI-Powered Welcome Header
             item {
-                AIWelcomeHeader(
-                    userName = state.userPreferences?.travelStyle?.capitalize() ?: "Explorer",
+                AIWelcomeHeaderWithLocation(
+                    userName = state.userPreferences?.userName?.capitalize() ?: "Explorer",
                     isLoading = state.isLoading,
+                    locationStatus = state.locationStatus ?: "Welcome back!",
+                    hasLocationData = state.hasLocationData,
+                    onLocationClick = {
+                        if (!locationPermissionState.allPermissionsGranted) {
+                            locationPermissionState.launchMultiplePermissionRequest()
+                        }
+                    },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
             }
@@ -90,6 +121,7 @@ fun HomeScreen(
                 )
             }
 
+            Log.d("Destination", "HomeScreen: ${state.popularDestinations} ")
             // AI-Curated Destinations
             item {
                 AICuratedDestinationsSection(

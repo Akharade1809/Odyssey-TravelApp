@@ -2,6 +2,7 @@ package com.example.odyssey
 
 import android.app.Application
 import com.example.odyssey.core.di.appModule
+import com.example.odyssey.core.location.locationModule
 import com.example.odyssey.domain.repository.repositoryModule
 import com.example.odyssey.domain.usecases.usecaseModule
 import com.example.odyssey.presentation.ui.viewModelModule
@@ -22,6 +23,7 @@ class OdysseyApplication : Application() {
                 repositoryModule,
                 viewModelModule,
                 usecaseModule,
+                locationModule,
 
             )
         }
