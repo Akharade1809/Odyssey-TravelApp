@@ -1,6 +1,5 @@
-package com.example.odyssey.presentation.ui.components
+package com.example.odyssey.presentation.ui.components.ai
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

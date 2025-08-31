@@ -1,4 +1,4 @@
-package com.example.odyssey.presentation.ui.components
+package com.example.odyssey.presentation.ui.components.ai
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseInOut

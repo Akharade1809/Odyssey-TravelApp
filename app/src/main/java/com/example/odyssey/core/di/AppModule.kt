@@ -2,6 +2,7 @@ package com.example.odyssey.core.di
 
 import androidx.room.Room
 import com.example.odyssey.core.database.TravelDatabase
+import com.example.odyssey.data.remote.AIPlanningApiService
 import com.example.odyssey.data.remote.AuthInterceptor
 import com.example.odyssey.data.remote.FourSquareApiService
 import okhttp3.OkHttpClient
@@ -44,5 +45,6 @@ val appModule = module {
             .build()
     }
     single { get<Retrofit>().create(FourSquareApiService::class.java) }
+    single { get<Retrofit>().create(AIPlanningApiService::class.java) }
 }
 

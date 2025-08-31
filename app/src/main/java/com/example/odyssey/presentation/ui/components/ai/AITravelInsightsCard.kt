@@ -1,4 +1,4 @@
-package com.example.odyssey.presentation.ui.components
+package com.example.odyssey.presentation.ui.components.ai
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

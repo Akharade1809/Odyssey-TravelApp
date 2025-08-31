@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.odyssey.core.base.BaseViewModel
 import com.example.odyssey.core.location.LocationManager
-import com.example.odyssey.domain.usecases.GetDestinationByCategory
+import com.example.odyssey.domain.usecases.GetDestinationByCategoryUseCase
 import com.example.odyssey.domain.usecases.GetPopularDestinationUseCase
 import com.example.odyssey.domain.usecases.GetUserPreferencesUseCase
 import kotlinx.coroutines.flow.catch
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getPopularDestinationUseCase: GetPopularDestinationUseCase,
-    private val getDestinationByCategory: GetDestinationByCategory,
+    private val getDestinationByCategoryUseCase: GetDestinationByCategoryUseCase,
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
     private val locationManager: LocationManager // Inject LocationManager
 ) : BaseViewModel<HomeIntent, HomeState, HomeEffect>() {

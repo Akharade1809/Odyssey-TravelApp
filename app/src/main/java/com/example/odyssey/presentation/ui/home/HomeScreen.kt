@@ -2,13 +2,10 @@ package com.example.odyssey.presentation.ui.home
 
 import android.Manifest
 import android.util.Log
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,12 +14,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.odyssey.data.models.Destination
 import com.example.odyssey.presentation.theme.*
-import com.example.odyssey.presentation.ui.components.AICuratedDestinationsSection
-import com.example.odyssey.presentation.ui.components.AIQuickActionsSection
-import com.example.odyssey.presentation.ui.components.AITravelInsightsCard
-import com.example.odyssey.presentation.ui.components.AIWelcomeHeaderWithLocation
+import com.example.odyssey.presentation.ui.components.ai.AICuratedDestinationsSection
+import com.example.odyssey.presentation.ui.components.ai.AIQuickActionsSection
+import com.example.odyssey.presentation.ui.components.ai.AITravelInsightsCard
+import com.example.odyssey.presentation.ui.components.ai.AIWelcomeHeaderWithLocation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -30,7 +28,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
-    onNavigateToItinerary: () -> Unit = {},
+    navController : NavHostController,
     onNavigateToChat: () -> Unit = {},
     onNavigateToExplore: () -> Unit = {},
     onNavigateToDestination: (Destination) -> Unit = {},
@@ -66,7 +64,9 @@ fun HomeScreen(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is HomeEffect.NavigateToItinerary -> onNavigateToItinerary()
+                is HomeEffect.NavigateToItinerary -> {
+                    navController.navigate("trip-planning")
+                }
                 is HomeEffect.NavigateToChat -> onNavigateToChat()
                 is HomeEffect.NavigateToDestination -> onNavigateToDestination(effect.destination)
                 is HomeEffect.NavigateToExplore -> onNavigateToExplore()
